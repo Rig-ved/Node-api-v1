@@ -7,7 +7,7 @@ let unifiedServer =  require('./unifiedServer')
 
 let data  = require('./lib/lib')
 // Test 
-data.create('test','nest',{'hello':'world'},function(err){
+data.create('test','users',{'hello':'world'},function(err){
   console.log(err)
 })
 // data.delete('test','nest',function(err){
