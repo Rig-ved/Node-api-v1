@@ -1,7 +1,8 @@
 // Create unified server request handler
 const { URL } = require("url");
 const { StringDecoder } = require("string_decoder");
-let routerConfig =  require('./router')
+let routerConfig =  require('./router');
+const helpers = require("./lib/helpers");
 
 function unifiedServer(req,res) {
     if (req.url != "/favicon.ico") {
@@ -40,19 +41,20 @@ function unifiedServer(req,res) {
       req.on("end", () => {
         buffer += decoder.end();
         // chose the handler this request should go to 
-        let chosenHandler =   typeof (routerConfig.router[trimmedPath]) !== 'undefined' ? routerConfig.router[trimmedPath] : routerConfig.handlers.notFound
+        let chosenHandler =   typeof (router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : routerConfig.handlers.notFound
         
         // construct the data object to be sent to the handler 
         let data  = {
             "trimmedPath":trimmedPath,
             "headers":headers,
             "method":method,
-            "payload":buffer,
+            "payload":helpers.parseToJson(buffer),
             "queryString":queryStringObj
         }
   
         // Route the request to the handler 
         chosenHandler(data,function(statusCode,payload){
+            console.log(data)
             // check the status 
             statusCode =  typeof statusCode === 'number' ? statusCode:200
             // check the payload
@@ -74,5 +76,10 @@ function unifiedServer(req,res) {
       });
     }
 }
-
+// Define a router 
+const router  = {
+  'sample' : routerConfig.handlers.sample,
+  'ping':routerConfig.handlers.ping,
+  'users':routerConfig.handlers.users
+}
 module.exports = unifiedServer

@@ -5,18 +5,7 @@ const https =  require('https')
 let fs = require('fs')
 let unifiedServer =  require('./unifiedServer')
 
-let data  = require('./lib/lib')
-// Test 
-data.create('test','users',{'hello':'world'},function(err){
-  console.log(err)
-})
-// data.delete('test','nest',function(err){
-//   console.log(`Error in deleting the file , ${err}`)
-// })
 
-// // data.read('test','nest',function(err,data){
-// //   console.log(`Error is ${err} and data is ${data}`)
-// // })
 
 
 // Create the http server object
